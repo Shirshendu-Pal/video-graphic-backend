@@ -39,10 +39,7 @@ const userSchema = new mongoose.Schema({
         required: true,
 
     },
-    societies: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Society"
-    }],
+    profilePic: String
 
 })
 

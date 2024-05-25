@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const config = require('./configuration/config');
 const port = config.serverPort || 8080;
 const router = require("./routes");
+const multer = require('multer');
+const path = require('path');
 
 const runServer = () => { 
 
@@ -16,6 +18,7 @@ const runServer = () => {
 
     app.use("/api", router);
 
+    
     app.listen(port, () => {
         console.log(`server listening over http on port ${port}`);
     });

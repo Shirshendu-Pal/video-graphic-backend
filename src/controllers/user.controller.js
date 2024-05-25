@@ -1,34 +1,18 @@
-const { userService } = require("../services");
 const { catchAsync } = require("../utils/catchAsync");
+const { userService, tokenService } = require("../services");
 const httpStatus = require("http-status");
 
-const ApiError = require("../utils/ApiError");
-
-const { User, Society } = require("../models");
 
 
-module.exports.getUser = catchAsync(async (req, res) => {
+const handleRequest = (serviceFunction, reqQuery , reqFile, reqParam) => {
+    return catchAsync(async (req, res) => {
+      const requestField = reqQuery?req.query:reqFile?{file:req.file,body:req.body}:reqParam?req.params:req.body
+      const result = await serviceFunction(requestField);
+      res.status(httpStatus.OK).json({success: true,result});
+    });
+  };
 
-
-    req.user = await User.populate(req.user, "societies");
-    console.log(req.user);
-    req.user.societies[0] = await userService.populateSociety(req.user.societies[0]);
-
-    res.status(httpStatus.OK).json({ success: true, user: req.user });
-});
-
-
-module.exports.addSociety = catchAsync(async (req, res) => {
-    const society = await userService.addSociety(req.body);
-    res.status(httpStatus.OK).json({ success: true, society });
-});
-
-module.exports.editSociety = catchAsync(async (req, res) => {
-    const society = await userService.editSociety(req.body);
-    res.status(httpStatus.OK).json({ success: true, society });
-});
-
-module.exports.deleteSociety = catchAsync(async (req, res) => {
-    await userService.deleteSociety(req.body);
-    res.status(httpStatus.OK).json({ success: true });
-});
+  module.exports.getUser = handleRequest(userService.getUser,true);
+  module.exports.userDetails = handleRequest(userService.userDetails);
+  module.exports.editUser = handleRequest(userService.editUser,false, true);
+  module.exports.addBulkQuestion = handleRequest(userService.addBulkQuestion,false, true);

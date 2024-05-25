@@ -4,28 +4,31 @@ const httpStatus = require("http-status");
 const jwt = require("jsonwebtoken");
 const {generateAuthToken} = require("./token.service");
 const bcrypt = require("bcryptjs");
+// const  generateAuthToken = require("./token.service");
+// const { uploadSingle } = require("./upload.service");
 
-const addCustomer = async (reqBody) => {
-
-    const user = await User.create({ name: reqBody.name,
-        email: reqBody.email,
-        phone: reqBody.phone,
-        password: reqBody.password });
-
-    await user.save();
+const registerUser = async (reqFile) => {
+    const uploadString = `uploads/${reqFile.file.filename}`
+    const body = reqFile.body
+    const user = await User.create({ 
+        ...body,
+        profilePic: uploadString
+    });
 
     return user;
     
 };
 
-const login = async (reqBody) => {
+const loginUser = async (reqBody) => {
     try{
-    const findUser = await User.findOne({email: reqBody.email})
-    const isMatch = await bcrypt.compare(reqBody.password, findUser.password)
-    
+    const user = await User.findOne({email: reqBody.email})
+    console.log(user)
+    const isMatch = await bcrypt.compare(reqBody.password, user.password)
+    console.log(isMatch)
     if(isMatch){
+        const tokens = await generateAuthToken(user);
      
-      return findUser;
+      return {user, tokens};
 }else{
     throw new ApiError(httpStatus.NOT_FOUND, "Incorrect password.");
 }
@@ -40,7 +43,7 @@ const login = async (reqBody) => {
 
 module.exports = {
    
-    addCustomer,
-    login
+    registerUser,
+    loginUser
 
 };

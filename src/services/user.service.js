@@ -1,70 +1,79 @@
 const httpStatus = require("http-status");
-const { User, Society } = require("../models");
+const { User, Token, Category, Question } = require("../models");
 const ApiError = require("../utils/ApiError");
+const csv = require("csv-parser");
+const fs = require("fs");
 
 
-const populateSociety = async (society) => {
-    return new Promise(async (resolve) => {
-        society = await Society.populate(society, "societies");
-        resolve(society);
-    })
+const getUser = async ({token}) =>{
+
+    const tokenDoc = await Token.findOne({token})
+    const user = await User.findById(tokenDoc.user)
+
+    return user;
+}
+const userDetails = async ({userId}) =>{
+    const user = await User.findById(userId)
+
+    return user;
 }
 
-
-
-const addSociety = async (reqBody) => {
-
-    const user = await User.findById(reqBody.userId);
-    if (!user) {
-        throw new ApiError(httpStatus.NOT_FOUND, "User not found");
-    }
-
-    const society = await Society.create({
-        societyName: reqBody.societyName,
-        societyCountry: reqBody.societyCountry,
-        societyState: reqBody.societyState,
-        societyCity: reqBody.societyCity,
-        socityGates: reqBody.socityGates
+const editUser = async (reqFile) =>{
+    const uploadString = `uploads/${reqFile.file.filename}`
+    const body = reqFile.body;
+    const user = await User.findByIdAndUpdate(body.userId,{ 
+        ...body,
+        profilePic: uploadString
     });
 
-
-    user.society.push(society);
-
-
-    await user.save();
-
-
-    return society;
-};
-
-const editSociety = async (reqBody) => {
-
-    // console.log(reqBody.remoteDeviceId);
-    let society = await Society.findById(reqBody.societyId);
-    if (!society) throw new ApiError(httpStatus.NOT_FOUND, "No Society found.");
-
-
-    Object.assign(society, reqBody);
-    await society.save();
-    //remoteDevice = await populateHouse(remoteDevice);
-
-    return society;
-};
-
-const deleteSociety = async (reqBody) => {
-
-    let society = await Society.findById(reqBody.societyId);
-    if (!society) throw new ApiError(httpStatus.NOT_FOUND, "No society found.");
-
-    await society.deleteOne({ _id: reqBody.societyId })
-
-
+    return user;
 }
 
+const addBulkQuestion = async (reqFile) =>{
+    let results = [];
+    fs.createReadStream(reqFile.file.path)
+      .pipe(csv())
+      .on("data", (row) => {
+        // console.log(row)
+        results.push(row);
+
+      }) .on("end", async () => {
+
+        for(let result of results) {
+
+            let category = await Category.findOne({name: result.categoryname.toLowerCase()})
+
+            if(category){
+                let question = await Question.create({
+                    name: result.questionname,
+                })
+                question.categories.push(category)
+                await question.save()
+                category.questions.push(question)
+                await category.save()
+            }else{
+
+                category = await Category.create({
+                   name: result.categoryname
+               })
+               let question = await Question.create({
+                name: result.questionname
+                })
+                question.categories.push(category)
+                await question.save()
+               category.questions.push(question)
+               await category.save()
+            }
+        }
+      
+    });
+}
+
+
 module.exports = {
-    addSociety,
-    editSociety,
-    deleteSociety,
-    populateSociety
+    getUser,
+    userDetails,
+    editUser,
+    addBulkQuestion
 
 }

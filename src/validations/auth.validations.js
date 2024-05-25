@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-module.exports.register = {
+module.exports.registerUser = {
     body: Joi.object().keys({
         name: Joi.string().required(),
         email: Joi.string().email(),
@@ -9,7 +9,7 @@ module.exports.register = {
     })
 };
 
-module.exports.login = {
+module.exports.loginUser = {
     body: Joi.object().keys({
         email: Joi.string().email().required(),
         password: Joi.string().required()

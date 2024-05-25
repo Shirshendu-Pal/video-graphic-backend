@@ -1,35 +1,16 @@
 const Joi = require("joi");
 
-module.exports.addSociety = {
+module.exports.userDetails = {
     body: Joi.object().keys({
-        userId: Joi.string(),
-        societyName: Joi.string().required(),
-        societyCountry: Joi.string().required(),
-        societyCity: Joi.string().required(),
-        societyState: Joi.string().required(),
-        socityGates: Joi.string()
-            .optional()
-
-
-
+        userId: Joi.string().required(),   
     }),
 };
-
-module.exports.editSociety = {
+module.exports.editUser = {
     body: Joi.object().keys({
-        societyId: Joi.string().required(),
-        societyName: Joi.string(),
-        societyCountry: Joi.string(),
-        societyCity: Joi.string(),
-        societyState: Joi.string(),
-        socityGates: Joi.string()
-        
-    }),
-};
-
-module.exports.deleteSociety = {
-    body: Joi.object().keys({
-        societyId: Joi.string().required(),
-        
+        userId: Joi.string().required(), 
+        name: Joi.string().optional().allow(null, ""),
+        name: Joi.string().optional().allow(null, ""),
+        email: Joi.string().email().allow(null, ""),
+        phone: Joi.string().optional().allow(null, ""),
     }),
 };
