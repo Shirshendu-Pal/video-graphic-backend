@@ -12,4 +12,4 @@ const handleRequest = (serviceFunction, reqQuery , reqFile, reqParam) => {
 
   module.exports.addQuestion = handleRequest(questionService.addQuestion,false, true);
   module.exports.allQuestion = handleRequest(questionService.allQuestion);
-  module.exports.questionDetails = handleRequest(questionService.categoryDetails);
+  module.exports.questionDetails = handleRequest(questionService.questionDetails);

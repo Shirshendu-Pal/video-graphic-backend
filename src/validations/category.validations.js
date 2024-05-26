@@ -3,7 +3,6 @@ const Joi = require('joi');
 module.exports.addCategory = {
     body: Joi.object().keys({
         name:Joi.string().required(),
-        image:Joi.string().optional().allow(null, ""),
         description:Joi.string().optional().allow(null, ""),
     })
 }
@@ -14,6 +13,6 @@ module.exports.allCategories = {
 }
 module.exports.categoryDetails = {
     body: Joi.object().keys({
-        categoryId: Joi.object().required()
+        categoryId: Joi.string().required()
     })
 }

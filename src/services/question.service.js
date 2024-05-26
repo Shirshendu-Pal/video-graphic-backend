@@ -1,30 +1,59 @@
 const httpStatus = require("http-status");
 const { User, Token, Category, Question } = require("../models");
 const ApiError = require("../utils/ApiError");
+const mongoose = require("mongoose");
 
 const addQuestion = async (reqFile) =>{
 
+    let uploadString = ""
     const body = reqFile.body
-    const uploadString = `uploads/${reqFile.file.filename}`
+    if(reqFile.file)
+     uploadString = `uploads/${reqFile.file.filename}`
 
-    const category = await Question.create({
+    const question = await Question.create({
         ...body,
         image:uploadString
     })
 
+    await Category.updateMany({_id:{$in:body.categories}}, {$push:{questions: question._id}})
 
-    return category;
+
+    return question;
 }
 
 const allQuestion = async ({filters}) =>{
+    for( let [key , value] of Object.entries(filters)){
+        if(value === "") delete filters[key]
+    }
+    const pipeline = [];
 
-    const categories = await Category.find(filters)
-    return categories;
+    if (filters.categoryId) {
+        pipeline.push({
+            $match: { categories: mongoose.Types.ObjectId(filters.categoryId) }
+        });
+        delete filters.categoryId; 
+    }
+    if (Object.keys(filters).length > 0) {
+        pipeline.push({
+            $match: filters
+        });
+    }
+
+    pipeline.push({
+        $lookup: {
+            from: 'categories',         
+            localField: 'categories',   
+            foreignField: '_id',        
+            as: 'categories'       
+        }
+    });
+    const questions = await Question.aggregate(pipeline);
+    return questions;
 }
 
 const questionDetails = async ({questionId}) =>{
-    const category = await Category.findById(questionId)
-    return category;
+    const question = await Question.findById(questionId)
+    return question;
 }
 
 module.exports  ={

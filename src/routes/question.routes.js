@@ -11,5 +11,4 @@ router.post("/add-question",upload.single('file'), validate(questionValidation.a
 router.post("/get-all-question", validate(questionValidation.allQuestion),  questionController.allQuestion);
 router.post("/question-details", validate(questionValidation.questionDetails),  questionController.questionDetails)
 
-
 module.exports = router;

@@ -3,7 +3,6 @@ const Joi = require('joi');
 module.exports.addQuestion = {
     body: Joi.object().keys({
         name:Joi.string().required(),
-        image:Joi.string().optional().allow(null, ""),
         description:Joi.string().optional().allow(null, ""),
         categories: Joi.array().required()
     })

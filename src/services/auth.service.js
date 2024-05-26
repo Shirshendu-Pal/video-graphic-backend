@@ -8,8 +8,10 @@ const bcrypt = require("bcryptjs");
 // const { uploadSingle } = require("./upload.service");
 
 const registerUser = async (reqFile) => {
-    const uploadString = `uploads/${reqFile.file.filename}`
+    let uploadString = ""
     const body = reqFile.body
+    if(reqFile.file)
+     uploadString = `uploads/${reqFile.file.filename}`
     const user = await User.create({ 
         ...body,
         profilePic: uploadString

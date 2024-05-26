@@ -4,8 +4,10 @@ const ApiError = require("../utils/ApiError");
 
 const addCategory = async (reqFile) =>{
 
+    let uploadString = ""
     const body = reqFile.body
-    const uploadString = `uploads/${reqFile.file.filename}`
+    if(reqFile.file)
+     uploadString = `uploads/${reqFile.file.filename}`
 
     const category = await Category.create({
         ...body,
@@ -15,15 +17,26 @@ const addCategory = async (reqFile) =>{
 
     return category;
 }
-
-const allCategories = async ({filters}) =>{
-
-    const categories = await Category.find(filters)
+const allCategories = async ({ filters }) => {
+    for( let [key , value] of Object.entries(filters)){
+        if(value === "") delete filters[key]
+    }
+    const categories = await Category.aggregate([
+        { $match: filters }, 
+        {
+            $lookup: {
+                from: 'questions',       
+                localField: 'questions', 
+                foreignField: '_id',     
+                as: 'questions'
+            }
+        }
+    ]);
     return categories;
-}
+};
 
 const categoryDetails = async ({categoryId}) =>{
-    const category = await Category.findById(categoryId)
+    const category = await Category.findById(categoryId).populate(["questions"])
     return category;
 }
 
