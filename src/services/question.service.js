@@ -52,7 +52,7 @@ const allQuestion = async ({filters}) =>{
 }
 
 const questionDetails = async ({questionId}) =>{
-    const question = await Question.findById(questionId)
+    const question = await Question.findById(questionId).populate(["categories"])
     return question;
 }
 

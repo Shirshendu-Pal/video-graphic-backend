@@ -14,6 +14,6 @@ module.exports.allQuestion = {
 }
 module.exports.questionDetails = {
     body: Joi.object().keys({
-        questionId: Joi.object().required()
+        questionId: Joi.string().required()
     })
 }
