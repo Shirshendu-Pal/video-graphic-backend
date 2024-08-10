@@ -10,37 +10,17 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 
 
 const userSchema = new mongoose.Schema({
-
-
-    email: {
-        type: String,
-        required: true,
-        unique: [true, "Email is already exist"],
-        validate(value) {
-            if (!validator.isEmail(value)) {
-                throw new Error("Invalid Email")
-            }
-        }
+    email:String,
+    first_name:String,
+    last_name:String,
+    phone: String,
+    password: String,
+    profilePic: String,
+    isDeleted:{
+        type: Boolean,
+        default:false
     },
-
-    name: {
-        type: String,
-        required: true,
-        unique: false
-    },
-
-    phone: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true,
-
-    },
-    profilePic: String
-
+    bio:String,
 })
 
 userSchema.pre("save", async function (next) {

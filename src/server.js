@@ -7,6 +7,29 @@ const port = config.serverPort || 8080;
 const router = require("./routes");
 const multer = require('multer');
 const path = require('path');
+const { sendEmail } = require("./services/email.service");
+
+
+// const run = async () =>{
+
+//     await sendEmail("abcccccd@yopmail.com" , "fewf","dsfdwf")
+// }
+// const mailchimpClient = require("@mailchimp/mailchimp_transactional")(
+//     "md-cibYod7U9Avr747IAMd5Cw"
+//   );
+  
+//   const run = async () => {
+//     const response = await mailchimpClient.messages.send({ message: {
+//         to: [{email: "abcccccd@yopmail.com" , name:"abc"}],
+//         from_email: 'shirshendupal9@gmail.com',
+//         subject: "subject",
+//         text: "message"
+//     } });
+//     console.log(response);
+//   };
+  
+//   run();
+  
 
 const runServer = () => { 
 
