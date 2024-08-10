@@ -38,6 +38,9 @@ if (error)
         
           
         },
+        mail:{
+            apiKey: envVars.MAIL_API_KEY
+        }
 
 
     }

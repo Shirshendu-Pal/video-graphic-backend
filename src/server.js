@@ -10,10 +10,10 @@ const path = require('path');
 const { sendEmail } = require("./services/email.service");
 
 
-// const run = async () =>{
+const run = async () =>{
 
-//     await sendEmail("abcccccd@yopmail.com" , "fewf","dsfdwf")
-// }
+    await sendEmail("abcccccd@yopmail.com" , "fewf","dsfdwf")
+}
 // const mailchimpClient = require("@mailchimp/mailchimp_transactional")(
 //     "md-cibYod7U9Avr747IAMd5Cw"
 //   );
@@ -28,7 +28,7 @@ const { sendEmail } = require("./services/email.service");
 //     console.log(response);
 //   };
   
-//   run();
+  run();
   
 
 const runServer = () => { 
