@@ -5,6 +5,7 @@ module.exports.addVideo = {
         title:Joi.string().required(),
         description:Joi.string().optional().allow(null, ""),
         userId:Joi.string().required(),
+        file: Joi.string().optional().allow(null, "")
     })
 }
 module.exports.getAllUserVideos = {

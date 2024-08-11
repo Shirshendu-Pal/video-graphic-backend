@@ -5,7 +5,8 @@ module.exports.registerUser = {
         first_name: Joi.string().required(),
         last_name: Joi.string().required(),
         email: Joi.string().email(),
-        phone: Joi.string().required()
+        phone: Joi.string().required(),
+        file: Joi.string().optional().allow(null, "")
     })
 };
 
