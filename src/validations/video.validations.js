@@ -9,15 +9,11 @@ module.exports.addVideo = {
 }
 module.exports.getAllUserVideos = {
     body: Joi.object().keys({
-        filters: Joi.object().required(),
-        page: Joi.number().required(),
-        limit: Joi.number().required(),
+        filters: Joi.object().required()
     })
 }
 module.exports.getAllVideos = {
     body: Joi.object().keys({
-        userId: Joi.string().required(),
-        page: Joi.number().required(),
-        limit: Joi.number().required(),
+        userId: Joi.string().required()
     })
 }

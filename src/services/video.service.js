@@ -20,12 +20,12 @@ const addVideo = async (reqFile) => {
 
   return video;
 };
-const getAllUserVideos = async ({ filters , page , limit }) => {
+const getAllUserVideos = async ({ filters  }) => {
   for (let [key, value] of Object.entries(filters)) {
     if (value === "") delete filters[key];
   }
   filters["isDeleted"] = false;
-  const aggregate = User.aggregate([
+  const users = await User.aggregate([
     { $match: filters },
 
     {
@@ -51,22 +51,22 @@ const getAllUserVideos = async ({ filters , page , limit }) => {
     },
   ]);
 
-  const options = {
-    page,
-    limit 
-  }
+//   const options = {
+//     page,
+//     limit 
+//   }
 
-  const users = await User.aggregatePaginate(aggregate, options);
+//   const users = await User.aggregatePaginate(aggregate, options);
 
 
   return users;
 };
 
-const getAllVideos = async ({ userId , page , limit }) => {
+const getAllVideos = async ({ userId}) => {
     let filters = {}
     filters["userId"] = mongoose.Types.ObjectId(userId)
     filters["isDeleted"] = false
-    const aggregate = Video.aggregate([
+    const videos = await Video.aggregate([
         { $match: filters },
         {
           $lookup: {
@@ -91,12 +91,12 @@ const getAllVideos = async ({ userId , page , limit }) => {
         {$unwind : '$user'}
       ]);
     
-      const options = {
-        page,
-        limit 
-      }
+    //   const options = {
+    //     page,
+    //     limit 
+    //   }
     
-      const videos = await Video.aggregatePaginate(aggregate, options);
+    //   const videos = await Video.aggregatePaginate(aggregate, options);
 
       return videos
 };
