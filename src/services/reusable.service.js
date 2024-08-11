@@ -1,5 +1,8 @@
 
 const bcrypt = require("bcryptjs");
+const fs = require("fs");
+const httpStatus = require("http-status");
+const ApiError = require("../utils/ApiError");
 
 
 const getRandomCharacters =(str, num) => {
@@ -42,7 +45,19 @@ const getUser = async (users , password) =>{
     }
 }
 
+const videoSizeError = async (file) =>{
+    const filePath = file.path;
+    const fileSize = fs.statSync(filePath).size; // Get file size in bytes
+
+    if (fileSize > 6 * 1024 * 1024) { // 6MB limit
+        // Delete the file if it exceeds the size limit
+        fs.unlinkSync(filePath);
+        throw new ApiError(httpStatus.UNAUTHORIZED, "file must in range of 6 mb");
+    }
+}
+
 module.exports ={
     generatePassword,
-    getUser
+    getUser,
+    videoSizeError
 }

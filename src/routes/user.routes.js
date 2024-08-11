@@ -13,9 +13,6 @@ router.get("/getuser", userController.getUser);
 router.post("/user-details",validate(userValidation.userDetails), userController.userDetails)
 router.post("/edit-user",upload.single('file'),validate(userValidation.editUser), userController.editUser)
 
-router.post("/upload-bulk-questions",upload.single('file'), userController.addBulkQuestion)
-
-
 
 
 

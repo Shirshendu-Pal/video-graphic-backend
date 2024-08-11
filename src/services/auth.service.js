@@ -20,7 +20,7 @@ const registerUser = async (reqFile) => {
     if (existingUser)
       throw new ApiError(httpStatus.UNAUTHORIZED, "user already registered");
 
-    if (reqFile.file) uploadString = `uploads/${reqFile.file.filename}`;
+    if (reqFile.file) uploadString = reqFile.file.filename;
 
     const sameNameUsers = await User.find({
       first_name: body.first_name,

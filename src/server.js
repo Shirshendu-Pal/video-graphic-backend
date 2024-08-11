@@ -40,6 +40,18 @@ const runServer = () => {
     app.use(express.json());
 
     app.use("/api", router);
+    app.use(express.static(path.join(__dirname, '../')));
+
+    app.get('/videos/:videoName', (req, res) => {
+        const videoPath = path.join(__dirname,"../uploads/videos/", req.params.videoName);
+        res.sendFile(videoPath);
+    });
+
+    app.get("/profile_pic/:picName", (req, res) => {
+        const profilePic =  path.join(__dirname,"../uploads/", req.params.picName);
+        res.sendFile(profilePic);
+    })
+    
 
     
     app.listen(port, () => {

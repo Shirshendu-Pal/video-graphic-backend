@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
+const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const dotenv = require('dotenv');
 
@@ -20,7 +21,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default:false
     },
-    bio:String,
+    bio:{
+        type: String,
+        default: ""
+    },
 })
 
 userSchema.pre("save", async function (next) {
@@ -35,5 +39,5 @@ userSchema.pre("save", async function (next) {
 
 
 
-
+userSchema.plugin(aggregatePaginate);
 module.exports = mongoose.model("User", userSchema);
