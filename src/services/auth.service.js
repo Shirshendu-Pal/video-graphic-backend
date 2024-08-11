@@ -10,7 +10,10 @@ const { sendEmail } = require("./email.service");
 // const { uploadSingle } = require("./upload.service");
 
 const registerUser = async (reqFile) => {
+  // console.log("called")
   try {
+
+    console.log(reqFile.file , reqFile.body)
     let uploadString = "";
     const body = reqFile.body;
     const existingUser = await User.findOne({

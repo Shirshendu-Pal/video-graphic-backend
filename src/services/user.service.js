@@ -22,7 +22,7 @@ const editUser = async (reqFile) =>{
 
     const body = reqFile.body;
     let user = await User.findById(body.userId)
-    let uploadString = body.profilePicIsDeleted? "" : body.profilePic
+    let uploadString = body.profilePicIsDeleted? "" : user.profilePic
     if(reqFile.file){
         uploadString = reqFile.file.filename
     }
